@@ -1,4 +1,7 @@
 -- Drop existing tables if they exist
+drop database  mental_health_db;
+create database mental_health_db;
+use  mental_health_db;
 DROP TABLE IF EXISTS MEDICINE;
 DROP TABLE IF EXISTS ALERT;
 DROP TABLE IF EXISTS FEEDBACK;
@@ -186,10 +189,10 @@ ORDER BY H.SEID, M.DATE DESC;
 
 -- Insert sample persons
 INSERT INTO PERSON (NAME, CONTACT, PSWD) VALUES
-('Kaushiki', '9876543210', 'password123'),
-('Komal', '9876543211', 'password123'),
-('Akanksha Nandy', '9876543212', 'password123'),
-('Krish Kumar', '9876543213', 'password123');
+('Kaushiki', '+919876543210', 'password123'),
+('Komal', '+19876543211', 'password123'),
+('Akanksha Nandy', '+919876543212', 'password123'),
+('Krish Kumar', '+19876543213', 'password123');
 
 -- Insert sample help seekers
 INSERT INTO HELPSEEKER (PID, ECONTACT) VALUES
@@ -242,4 +245,3 @@ SELECT 'Sample data inserted' AS Info;
 
 -- Show tables
 SHOW TABLES;
-select * from person;
