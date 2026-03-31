@@ -1,37 +1,35 @@
 package com.mentalhealthapp.gui;
-
 import com.mentalhealthapp.dao.HelpSeekerDAO;
 import com.mentalhealthapp.dao.CounsellorDAO;
 import com.mentalhealthapp.model.HelpSeeker;
 import com.mentalhealthapp.model.Counsellor;
-
 import javax.swing.*;
 import java.awt.*;
-
-public class LoginFrame extends JFrame {
-    
-    private JTextField contactField;
+public class LoginFrame extends JFrame 
+{
+	private JComboBox<String> countryCodeCombo;
+	private JTextField contactField;
     private JPasswordField passwordField;
     private JComboBox<String> roleComboBox;
     private JButton loginButton;
     private JButton registerButton;
-    
+   
     private HelpSeekerDAO helpSeekerDAO = new HelpSeekerDAO();
     private CounsellorDAO counsellorDAO = new CounsellorDAO();
     
-    public LoginFrame() {
+    public LoginFrame() 
+    {
         setTitle("SafeSpace - A Mental Health Support Platform");
         setSize(450, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
-        
         initComponents();
     }
-    
-    private void initComponents() {
+    private void initComponents() 
+    {
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout(10, 10));
+        mainPanel.setLayout(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
         JPanel headerPanel = new JPanel();
@@ -64,9 +62,15 @@ public class LoginFrame extends JFrame {
         formPanel.add(roleComboBox);
         
         formPanel.add(new JLabel("Contact Number:"));
+        JPanel contactPanel = new JPanel(new BorderLayout(5, 0));
+        String[] countryCodes = {"+91", "+1", "+44", "+61", "+81"};
+        countryCodeCombo = new JComboBox<>(countryCodes);
+        countryCodeCombo.setFont(new Font("Arial", Font.PLAIN, 14));
         contactField = new JTextField();
         contactField.setFont(new Font("Arial", Font.PLAIN, 14));
-        formPanel.add(contactField);
+        contactPanel.add(countryCodeCombo, BorderLayout.WEST);
+        contactPanel.add(contactField, BorderLayout.CENTER);
+        formPanel.add(contactPanel);
         
         formPanel.add(new JLabel("Password:"));
         passwordField = new JPasswordField();
@@ -103,7 +107,8 @@ public class LoginFrame extends JFrame {
     }
     
     private void handleLogin() {
-        String contact = contactField.getText().trim();
+    	String contact = countryCodeCombo.getSelectedItem().toString() 
+                + contactField.getText().trim();
         String password = new String(passwordField.getPassword());
         String role = (String) roleComboBox.getSelectedItem();
         
