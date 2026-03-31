@@ -1,7 +1,7 @@
--- Drop existing tables if they exist
 drop database  mental_health_db;
 create database mental_health_db;
 use  mental_health_db;
+-- Drop existing tables if they exist
 DROP TABLE IF EXISTS MEDICINE;
 DROP TABLE IF EXISTS ALERT;
 DROP TABLE IF EXISTS FEEDBACK;
