@@ -1,8 +1,6 @@
 package com.mentalhealthapp.gui;
-
 import com.mentalhealthapp.dao.*;
 import com.mentalhealthapp.model.*;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -17,7 +15,6 @@ public class HelpSeekerDashboard extends JFrame {
     private AppointmentDAO appointmentDAO = new AppointmentDAO();
     private CounsellorDAO counsellorDAO = new CounsellorDAO();
     private AlertDAO alertDAO = new AlertDAO();
-    
     private JTabbedPane tabbedPane;
     
     public HelpSeekerDashboard(HelpSeeker helpSeeker) {
@@ -76,15 +73,21 @@ public class HelpSeekerDashboard extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton logMoodBtn = new JButton("Log Mood Today");
         JButton bookApptBtn = new JButton("Book Appointment");
+        JButton refreshBtn = new JButton("Refresh");
         
         logMoodBtn.setFont(new Font("Arial", Font.BOLD, 14));
         bookApptBtn.setFont(new Font("Arial", Font.BOLD, 14));
+        refreshBtn.setFont(new Font("Arial", Font.BOLD, 14));
         
         logMoodBtn.addActionListener(e -> showLogMoodDialog());
         bookApptBtn.addActionListener(e -> showBookAppointmentDialog());
+        refreshBtn.addActionListener(e -> {
+            tabbedPane.setComponentAt(0, createDashboardPanel());
+        });
         
         buttonPanel.add(logMoodBtn);
         buttonPanel.add(bookApptBtn);
+        buttonPanel.add(refreshBtn);
         
         panel.add(welcomeLabel, BorderLayout.NORTH);
         panel.add(statsPanel, BorderLayout.CENTER);
@@ -160,7 +163,7 @@ public class HelpSeekerDashboard extends JFrame {
         List<MoodLog> logs = moodLogDAO.getMoodLogsBySeekerId(helpSeeker.getSeid());
         
         for (MoodLog log : logs) {
-            String status = log.getScore() <= 3 ? "⚠️ Critical" : (log.getScore() <= 6 ? "Moderate" : "Good");
+            String status = log.getScore() <= 3 ? "Critical" : (log.getScore() <= 6 ? "Moderate" : "Good");
             model.addRow(new Object[]{
                 log.getDate(),
                 log.getTime().format(DateTimeFormatter.ofPattern("HH:mm")),
@@ -203,11 +206,11 @@ public class HelpSeekerDashboard extends JFrame {
             if (moodLogDAO.addMoodLog(log)) {
                 if (score <= 3) {
                     JOptionPane.showMessageDialog(dialog,
-                        "Critical mood score!\nAn alert has been sent to your emergency contact.",
-                        "Alert Created",
+                        "Critical mood score!",
+                        "An alert has been sent to your emergency contact.",
                         JOptionPane.WARNING_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(dialog, "Mood logged successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(dialog, "Mood logged.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
                 dialog.dispose();
                 tabbedPane.setSelectedIndex(1);
@@ -327,7 +330,7 @@ public class HelpSeekerDashboard extends JFrame {
                 Appointment apt = new Appointment(helpSeeker.getSeid(), cid, date, time, "Pending");
                 
                 if (appointmentDAO.bookAppointment(apt)) {
-                    JOptionPane.showMessageDialog(dialog, "Appointment booked successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(dialog, "Appointment booked.", "Success!", JOptionPane.INFORMATION_MESSAGE);
                     dialog.dispose();
                     tabbedPane.setSelectedIndex(2);
                 }
