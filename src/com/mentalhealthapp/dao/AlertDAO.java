@@ -1,24 +1,23 @@
 package com.mentalhealthapp.dao;
-
 import com.mentalhealthapp.model.Alert;
 import com.mentalhealthapp.util.DatabaseConnection;
-
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlertDAO {
-    
-    public List<Alert> getActiveAlerts() {
+public class AlertDAO 
+{    
+    public List<Alert> getActiveAlerts() 
+    {
         List<Alert> alerts = new ArrayList<>();
         String sql = "SELECT * FROM ALERT WHERE STATUS IN ('Active', 'Critical') ORDER BY CREATED_AT DESC";
-        
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
-            while (rs.next()) {
+             ResultSet rs = stmt.executeQuery(sql)) 
+        {  
+            while (rs.next()) 
+            {
                 Alert alert = new Alert();
                 alert.setAlid(rs.getInt("ALID"));
                 alert.setLogId(rs.getInt("LOGID"));
@@ -26,15 +25,14 @@ public class AlertDAO {
                 alert.setStatus(rs.getString("STATUS"));
                 alert.setCreatedAt(rs.getTimestamp("CREATED_AT").toLocalDateTime());
                 alerts.add(alert);
-            }
-            
-        } catch (SQLException e) {
+            } 
+        } 
+        catch (SQLException e) 
+        {
             e.printStackTrace();
         }
-        
         return alerts;
     }
-    
     public List<Alert> getAlertsBySeekerId(int seid) {
         List<Alert> alerts = new ArrayList<>();
         String sql = "SELECT A.* FROM ALERT A " +
