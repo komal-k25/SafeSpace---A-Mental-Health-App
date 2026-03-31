@@ -186,11 +186,10 @@ ORDER BY H.SEID, M.DATE DESC;
 
 -- Insert sample persons
 INSERT INTO PERSON (NAME, CONTACT, PSWD) VALUES
-('John Doe', '9876543210', 'password123'),
-('Jane Smith', '9876543211', 'password123'),
-('Dr. Sarah Wilson', '9876543212', 'password123'),
-('Dr. Michael Brown', '9876543213', 'password123'),
-('Emily Student', '9876543214', 'password123');
+('Kaushiki', '9876543210', 'password123'),
+('Komal', '9876543211', 'password123'),
+('Akanksha Nandy', '9876543212', 'password123'),
+('Krish Kumar', '9876543213', 'password123');
 
 -- Insert sample help seekers
 INSERT INTO HELPSEEKER (PID, ECONTACT) VALUES
@@ -207,15 +206,11 @@ INSERT INTO PROFESSIONAL (SEID, INDNAME) VALUES
 
 -- Insert sample counsellors
 INSERT INTO COUNSELLOR (PID, EMAIL, SPEC, LICNO) VALUES
-(3, 'sarah.wilson@therapy.com', 'Clinical Psychology', 'LIC12345'),
-(4, 'michael.brown@therapy.com', 'Anxiety & Depression', 'LIC12346'),
-(5, 'emily.student@volunteer.com', 'Peer Support', 'VOL001');
+(3, 'akanksha.nandy@therapy.com', 'Clinical Psychology', 'LIC12345'),
+(4, 'krish.kumar@therapy.com', 'Anxiety & Depression', 'LIC12346');
 
 -- Insert clinical psychologists
 INSERT INTO CLINICAL_PSYCHOLOGIST (CID) VALUES (1), (2);
-
--- Insert student volunteer
-INSERT INTO STUDENT_VOLUNTEER (CID) VALUES (3);
 
 -- Insert sample medicines
 INSERT INTO MEDICINE (NAME, DOSAGE, PRICE) VALUES
@@ -247,3 +242,4 @@ SELECT 'Sample data inserted' AS Info;
 
 -- Show tables
 SHOW TABLES;
+select * from person;
