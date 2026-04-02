@@ -14,6 +14,7 @@ public class CounsellorRegistrationDialog extends JDialog {
     private JTextField emailField;
     private JTextField specializationField;
     private JTextField licenseField;
+    private JComboBox<String> countryCodeCombo;
     private CounsellorDAO counsellorDAO = new CounsellorDAO();
     
     public CounsellorRegistrationDialog(JFrame parent) {
@@ -36,8 +37,15 @@ public class CounsellorRegistrationDialog extends JDialog {
         formPanel.add(nameField);
         
         formPanel.add(new JLabel("Contact Number:"));
+        JPanel contactPanel = new JPanel(new BorderLayout(5, 0));
+        String[] countryCodes = {"+91", "+1", "+44", "+61", "+81"};
+        countryCodeCombo = new JComboBox<>(countryCodes);
+        countryCodeCombo.setFont(new Font("Arial", Font.PLAIN, 14));
         contactField = new JTextField();
-        formPanel.add(contactField);
+        contactField.setFont(new Font("Arial", Font.PLAIN, 14));
+        contactPanel.add(countryCodeCombo, BorderLayout.WEST);
+        contactPanel.add(contactField, BorderLayout.CENTER);
+        formPanel.add(contactPanel);
         
         formPanel.add(new JLabel("Email:"));
         emailField = new JTextField();
@@ -78,7 +86,16 @@ public class CounsellorRegistrationDialog extends JDialog {
     
     private void handleRegistration() {
         String name = nameField.getText().trim();
-        String contact = contactField.getText().trim();
+        String countryCode = (String) countryCodeCombo.getSelectedItem();
+        String number = contactField.getText().trim();
+
+        
+        if (!number.matches("\\d{10}")) {
+            JOptionPane.showMessageDialog(this, "Contact number must be exactly 10 digits!");
+            return;
+        }
+
+        String contact = countryCode + number;
         String email = emailField.getText().trim();
         String spec = specializationField.getText().trim();
         String license = licenseField.getText().trim();
