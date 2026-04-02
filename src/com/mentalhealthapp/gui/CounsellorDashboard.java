@@ -124,11 +124,12 @@ public class CounsellorDashboard extends JFrame {
         
         JButton updateBtn = new JButton("Update Status");
         updateBtn.setFont(new Font("Arial", Font.BOLD, 14));
+
         updateBtn.addActionListener(e -> {
             try {
                 int aid = Integer.parseInt(aidField.getText());
                 String newStatus = (String) statusCombo.getSelectedItem();
-                
+
                 if (appointmentDAO.updateAppointmentStatus(aid, newStatus)) {
                     JOptionPane.showMessageDialog(this, "Status updated.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     aidField.setText("");
@@ -139,14 +140,17 @@ public class CounsellorDashboard extends JFrame {
                 JOptionPane.showMessageDialog(this, "Enter a valid Appointment ID!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
         
-        formPanel.add(updateBtn);
-        formPanel.add(new JLabel());
-        
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(updateBtn);
+        formPanel.setMaximumSize(new Dimension(600,150));
+        formPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(titleLabel);
         panel.add(Box.createRigidArea(new Dimension(0, 30)));
         panel.add(formPanel);
-        
+        panel.add(Box.createRigidArea(new Dimension(0, 20)));
+        panel.add(buttonPanel);
         return panel;
     }
 }
