@@ -5,13 +5,13 @@ import com.mentalhealthapp.model.HelpSeeker;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.text.*;
 
 public class HelpSeekerRegistrationDialog extends JDialog {
     private JTextField nameField;
     private JTextField contactField;
     private JPasswordField passwordField;
     private JPasswordField confirmPasswordField;
-    private JTextField emergencyContactField;
     private JComboBox<String> countryCodeCombo;
     private JComboBox<String> emergencyCountryCodeCombo;
     private JTextField emergencyNumberField;
@@ -79,6 +79,12 @@ public class HelpSeekerRegistrationDialog extends JDialog {
         mainPanel.add(titleLabel, BorderLayout.NORTH);
         mainPanel.add(formPanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        ((AbstractDocument) contactField.getDocument())
+        .setDocumentFilter(new NumberOnlyFilter(10));
+
+        ((AbstractDocument) emergencyNumberField.getDocument())
+        .setDocumentFilter(new NumberOnlyFilter(10));
         
         add(mainPanel);
     }
@@ -87,7 +93,6 @@ public class HelpSeekerRegistrationDialog extends JDialog {
         String name = nameField.getText().trim();
         String countryCode = (String) countryCodeCombo.getSelectedItem();
         String number = contactField.getText().trim();
-
        
         if (!number.matches("\\d{10}")) {
             JOptionPane.showMessageDialog(this, "Contact number must be exactly 10 digits!");
@@ -97,6 +102,21 @@ public class HelpSeekerRegistrationDialog extends JDialog {
         String contact = countryCode + number;
         
         String password = new String(passwordField.getPassword());
+        String passwordPattern =
+                "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
+
+        if (!password.matches(passwordPattern)) {
+            JOptionPane.showMessageDialog(this,
+                    "Password must contain:\n" +
+                    "- At least 8 characters\n" +
+                    "- One uppercase letter\n" +
+                    "- One lowercase letter\n" +
+                    "- One digit\n" +
+                    "- One special character (@#$%^&+=!)"
+            );
+            return;
+        }
+        
         String confirmPassword = new String(confirmPasswordField.getPassword());
         
         String emergencyCode = (String) emergencyCountryCodeCombo.getSelectedItem();
@@ -126,6 +146,24 @@ public class HelpSeekerRegistrationDialog extends JDialog {
             dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Registration failed!\nContact number may already exist.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
+class NumberOnlyFilter extends DocumentFilter {
+    private int maxLength;
+
+    public NumberOnlyFilter(int maxLength) {
+        this.maxLength = maxLength;
+    }
+
+    @Override
+    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+            throws BadLocationException {
+
+        if (text.matches("\\d*")) {
+            if (fb.getDocument().getLength() + text.length() - length <= maxLength) {
+                super.replace(fb, offset, length, text, attrs);
+            }
         }
     }
 }
