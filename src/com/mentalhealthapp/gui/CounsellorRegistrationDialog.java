@@ -100,6 +100,20 @@ public class CounsellorRegistrationDialog extends JDialog {
         String spec = specializationField.getText().trim();
         String license = licenseField.getText().trim();
         String password = new String(passwordField.getPassword());
+        String passwordPattern =
+                "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
+
+        if (!password.matches(passwordPattern)) {
+            JOptionPane.showMessageDialog(this,
+                    "Password must contain:\n" +
+                    "- At least 8 characters\n" +
+                    "- One uppercase letter\n" +
+                    "- One lowercase letter\n" +
+                    "- One digit\n" +
+                    "- One special character (@#$%^&+=!)"
+            );
+            return;
+        }
         String confirmPassword = new String(confirmPasswordField.getPassword());
         
         if (name.isEmpty() || contact.isEmpty() || email.isEmpty() || spec.isEmpty() || license.isEmpty() || password.isEmpty()) {
