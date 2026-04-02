@@ -12,6 +12,7 @@ public class HelpSeekerRegistrationDialog extends JDialog {
     private JPasswordField passwordField;
     private JPasswordField confirmPasswordField;
     private JTextField emergencyContactField;
+    private JComboBox<String> countryCodeCombo;
     private HelpSeekerDAO helpSeekerDAO = new HelpSeekerDAO();
     
     public HelpSeekerRegistrationDialog(JFrame parent) {
@@ -34,8 +35,15 @@ public class HelpSeekerRegistrationDialog extends JDialog {
         formPanel.add(nameField);
         
         formPanel.add(new JLabel("Contact Number:"));
+        JPanel contactPanel = new JPanel(new BorderLayout(5, 0));
+        String[] countryCodes = {"+91", "+1", "+44", "+61", "+81"};
+        countryCodeCombo = new JComboBox<>(countryCodes);
+        countryCodeCombo.setFont(new Font("Arial", Font.PLAIN, 14));
         contactField = new JTextField();
-        formPanel.add(contactField);
+        contactField.setFont(new Font("Arial", Font.PLAIN, 14));
+        contactPanel.add(countryCodeCombo, BorderLayout.WEST);
+        contactPanel.add(contactField, BorderLayout.CENTER);
+        formPanel.add(contactPanel);
         
         formPanel.add(new JLabel("Password:"));
         passwordField = new JPasswordField();
@@ -68,7 +76,16 @@ public class HelpSeekerRegistrationDialog extends JDialog {
     
     private void handleRegistration() {
         String name = nameField.getText().trim();
-        String contact = contactField.getText().trim();
+        String countryCode = (String) countryCodeCombo.getSelectedItem();
+        String number = contactField.getText().trim();
+
+       
+        if (!number.matches("\\d{10}")) {
+            JOptionPane.showMessageDialog(this, "Contact number must be exactly 10 digits!");
+            return;
+        }
+
+        String contact = countryCode + number;
         String password = new String(passwordField.getPassword());
         String confirmPassword = new String(confirmPasswordField.getPassword());
         String emergencyContact = emergencyContactField.getText().trim();
