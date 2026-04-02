@@ -324,18 +324,42 @@ public class HelpSeekerDashboard extends JFrame {
                 LocalDate date = LocalDate.parse(dateField.getText());
                 LocalTime time = LocalTime.parse(timeField.getText());
                 
+                LocalDate tomorrow = LocalDate.now().plusDays(1);
+                if (date.isBefore(tomorrow)) {
+                    JOptionPane.showMessageDialog(dialog, 
+                        "Professional Policy: Appointments must be scheduled at least 24 hours in advance.\n" +
+                        "Please select a date from " + tomorrow + " onwards.", 
+                        "Scheduling Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                    return; 
+                }
+                
                 int selectedIndex = counsellorCombo.getSelectedIndex();
                 int cid = selectedIndex > 0 ? counsellors.get(selectedIndex - 1).getCid() : 0;
                 
                 Appointment apt = new Appointment(helpSeeker.getSeid(), cid, date, time, "Pending");
                 
                 if (appointmentDAO.bookAppointment(apt)) {
-                    JOptionPane.showMessageDialog(dialog, "Appointment booked.", "Success!", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(dialog, "Appointment booked successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     dialog.dispose();
+                    
                     tabbedPane.setSelectedIndex(2);
+
+                    JPanel apptPanel = (JPanel) tabbedPane.getComponentAt(2);
+                    for (Component c : apptPanel.getComponents()) {
+                        if (c instanceof JScrollPane) {
+                            JViewport viewport = ((JScrollPane) c).getViewport();
+                            JTable apptTable = (JTable) viewport.getView();
+                            loadAppointments((DefaultTableModel) apptTable.getModel());
+                        }
+                    }
                 }
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(dialog, "Invalid date or time format!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, 
+                    "Format Error: Use YYYY-MM-DD for Date (e.g., 2026-04-01)\n" +
+                    "and HH:MM for Time (e.g., 14:30).", 
+                    "Input Error", 
+                    JOptionPane.ERROR_MESSAGE);
             }
         });
         
