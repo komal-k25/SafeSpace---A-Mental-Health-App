@@ -13,6 +13,8 @@ public class HelpSeekerRegistrationDialog extends JDialog {
     private JPasswordField confirmPasswordField;
     private JTextField emergencyContactField;
     private JComboBox<String> countryCodeCombo;
+    private JComboBox<String> emergencyCountryCodeCombo;
+    private JTextField emergencyNumberField;
     private HelpSeekerDAO helpSeekerDAO = new HelpSeekerDAO();
     
     public HelpSeekerRegistrationDialog(JFrame parent) {
@@ -54,8 +56,15 @@ public class HelpSeekerRegistrationDialog extends JDialog {
         formPanel.add(confirmPasswordField);
         
         formPanel.add(new JLabel("Emergency Contact:"));
-        emergencyContactField = new JTextField();
-        formPanel.add(emergencyContactField);
+        JPanel emergencyPanel = new JPanel(new BorderLayout(5, 0));
+        String[] countryCodes1 = {"+91", "+1", "+44", "+61", "+81"};
+        emergencyCountryCodeCombo = new JComboBox<>(countryCodes1); 
+        emergencyCountryCodeCombo.setFont(new Font("Arial", Font.PLAIN, 14));
+        emergencyNumberField = new JTextField(); // The text box
+        emergencyNumberField.setFont(new Font("Arial", Font.PLAIN, 14));
+        emergencyPanel.add(emergencyCountryCodeCombo, BorderLayout.WEST);
+        emergencyPanel.add(emergencyNumberField, BorderLayout.CENTER);
+        formPanel.add(emergencyPanel);
         
         JPanel buttonPanel = new JPanel();
         JButton registerButton = new JButton("Register");
@@ -86,9 +95,19 @@ public class HelpSeekerRegistrationDialog extends JDialog {
         }
 
         String contact = countryCode + number;
+        
         String password = new String(passwordField.getPassword());
         String confirmPassword = new String(confirmPasswordField.getPassword());
-        String emergencyContact = emergencyContactField.getText().trim();
+        
+        String emergencyCode = (String) emergencyCountryCodeCombo.getSelectedItem();
+        String emergencyNumber = emergencyNumberField.getText().trim();
+
+        if (!emergencyNumber.matches("\\d{10}")) {
+            JOptionPane.showMessageDialog(this, "Emergency contact number must be exactly 10 digits!");
+            return;
+        }
+
+        String emergencyContact = emergencyCode + emergencyNumber;
         
         if (name.isEmpty() || contact.isEmpty() || password.isEmpty() || emergencyContact.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in all fields!");
