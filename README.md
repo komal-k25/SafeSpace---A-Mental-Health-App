@@ -1,4 +1,4 @@
-# SafeSpace — An Anonymous Mental Health Support Platform
+# SAFESPACE — An Anonymous Mental Health Support Platform
 
 SafeSpace is a desktop-based mental health support application designed to provide users with a secure and anonymous environment to seek help, schedule counselling sessions, and track emotional well-being without fear of judgement.
 
