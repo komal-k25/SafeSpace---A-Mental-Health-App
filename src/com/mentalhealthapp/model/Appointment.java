@@ -1,4 +1,5 @@
 package com.mentalhealthapp.model;
+import com.mentalhealthapp.model.Appointment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,6 +11,8 @@ public class Appointment {
     private LocalDate date;
     private LocalTime time;
     private String status;
+    private String medicine;
+
     
     public Appointment() {}
     
@@ -28,6 +31,14 @@ public class Appointment {
         this.date = date;
         this.time = time;
         this.status = status;
+    }
+    
+    public String getMedicine() {
+        return medicine;
+    }
+
+    public void setMedicine(String medicine) {
+        this.medicine = medicine;
     }
     
     public int getAid() {
