@@ -55,7 +55,7 @@ public class CounsellorDashboard extends JFrame {
         JLabel welcomeLabel = new JLabel("Welcome, Dr. " + counsellor.getName(), JLabel.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         
-        String[] columns = {"ID", "Date", "Time", "Help Seeker", "Status"};
+        String[] columns = {"ID", "Date", "Time", "Help Seeker", "Status", "Medicine"};
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -93,12 +93,13 @@ public class CounsellorDashboard extends JFrame {
             String seekerName = seeker != null ? "User-" + seeker.getSeid() : "Unknown";
             
             model.addRow(new Object[]{
-                apt.getAid(),
-                apt.getDate(),
-                apt.getTime().format(DateTimeFormatter.ofPattern("HH:mm")),
-                seekerName,
-                apt.getStatus()
-            });
+            	    apt.getAid(),
+            	    apt.getDate(),
+            	    apt.getTime().format(DateTimeFormatter.ofPattern("HH:mm")),
+            	    seekerName,
+            	    apt.getStatus(),
+            	    apt.getMedicine() 
+            	});
         }
     }
     
@@ -111,7 +112,7 @@ public class CounsellorDashboard extends JFrame {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 20));
+        JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 20));
         
         formPanel.add(new JLabel("Appointment ID:"));
         JTextField aidField = new JTextField();
@@ -122,6 +123,11 @@ public class CounsellorDashboard extends JFrame {
         JComboBox<String> statusCombo = new JComboBox<>(statuses);
         formPanel.add(statusCombo);
         
+        // ✅ ONLY ONE medicine field
+        formPanel.add(new JLabel("Medicine:"));
+        JTextField medicineField = new JTextField();
+        formPanel.add(medicineField);
+        
         JButton updateBtn = new JButton("Update Status");
         updateBtn.setFont(new Font("Arial", Font.BOLD, 14));
 
@@ -129,10 +135,12 @@ public class CounsellorDashboard extends JFrame {
             try {
                 int aid = Integer.parseInt(aidField.getText());
                 String newStatus = (String) statusCombo.getSelectedItem();
+                String medicine = medicineField.getText(); // ✅ correct place
 
-                if (appointmentDAO.updateAppointmentStatus(aid, newStatus)) {
+                if (appointmentDAO.updateAppointmentStatus(aid, newStatus, medicine)) {
                     JOptionPane.showMessageDialog(this, "Status updated.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     aidField.setText("");
+                    medicineField.setText("");
                 } else {
                     JOptionPane.showMessageDialog(this, "Failed to update!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -141,16 +149,18 @@ public class CounsellorDashboard extends JFrame {
             }
         });
 
-        
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(updateBtn);
-        formPanel.setMaximumSize(new Dimension(600,150));
+
+        formPanel.setMaximumSize(new Dimension(600, 200));
         formPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         panel.add(titleLabel);
         panel.add(Box.createRigidArea(new Dimension(0, 30)));
         panel.add(formPanel);
         panel.add(Box.createRigidArea(new Dimension(0, 20)));
         panel.add(buttonPanel);
+
         return panel;
     }
 }
