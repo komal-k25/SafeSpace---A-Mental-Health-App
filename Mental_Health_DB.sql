@@ -245,3 +245,5 @@ SELECT 'Sample data inserted' AS Info;
 
 -- Show tables
 SHOW TABLES;
+
+ALTER TABLE appointment ADD COLUMN MEDICINE varchar(255);
