@@ -54,13 +54,14 @@ public class AppointmentDAO {
                 appointment.setDate(rs.getDate("DATE").toLocalDate());
                 appointment.setTime(rs.getTime("TIME").toLocalTime());
                 appointment.setStatus(rs.getString("STATUS"));
+                
+                appointment.setMedicine(rs.getString("MEDICINE")); 
+                
                 appointments.add(appointment);
             }
-            
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
         return appointments;
     }
     
@@ -94,27 +95,19 @@ public class AppointmentDAO {
     }
     
     public boolean updateAppointmentStatus(int aid, String status, String medicine) {
-        boolean updated = false;
-
-        try {
-            String sql = "UPDATE APPOINTMENT SET STATUS = ?, MEDICINE = ? WHERE AID = ?";
-            java.sql.Connection conn = DatabaseConnection.getConnection();
-            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+        String sql = "UPDATE APPOINTMENT SET STATUS = ?, MEDICINE = ? WHERE AID = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, status);
             ps.setString(2, medicine);
             ps.setInt(3, aid);
 
-            updated = ps.executeUpdate() > 0;
-
-            ps.close();
-            conn.close();
-
-        } catch (Exception e) {
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-
-        return updated;
     }
     
     public boolean assignCounsellor(int aid, int cid) {
@@ -151,13 +144,14 @@ public class AppointmentDAO {
                 appointment.setDate(rs.getDate("DATE").toLocalDate());
                 appointment.setTime(rs.getTime("TIME").toLocalTime());
                 appointment.setStatus(rs.getString("STATUS"));
+            
+                appointment.setMedicine(rs.getString("MEDICINE")); 
+                
                 appointments.add(appointment);
             }
-            
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
         return appointments;
     }
     
