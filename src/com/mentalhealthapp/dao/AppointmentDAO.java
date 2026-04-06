@@ -56,6 +56,7 @@ public class AppointmentDAO {
                 appointment.setStatus(rs.getString("STATUS"));
                 
                 appointment.setMedicine(rs.getString("MEDICINE")); 
+                appointment.setMeetingCode(rs.getString("MEETING_CODE"));
                 
                 appointments.add(appointment);
             }
@@ -84,6 +85,8 @@ public class AppointmentDAO {
                 appointment.setTime(rs.getTime("TIME").toLocalTime());
                 appointment.setStatus(rs.getString("STATUS"));
                 appointment.setMedicine(rs.getString("MEDICINE"));
+                appointment.setMeetingCode(rs.getString("MEETING_CODE"));
+                
                 appointments.add(appointment);
             }
             
@@ -94,14 +97,15 @@ public class AppointmentDAO {
         return appointments;
     }
     
-    public boolean updateAppointmentStatus(int aid, String status, String medicine) {
-        String sql = "UPDATE APPOINTMENT SET STATUS = ?, MEDICINE = ? WHERE AID = ?";
+    public boolean updateAppointmentStatus(int aid, String status, String medicine, String meetingCode) {
+        String sql = "UPDATE APPOINTMENT SET STATUS = ?, MEDICINE = ?, MEETING_CODE = ? WHERE AID = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, status);
             ps.setString(2, medicine);
-            ps.setInt(3, aid);
+            ps.setString(3, meetingCode); 
+            ps.setInt(4, aid);
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -143,9 +147,10 @@ public class AppointmentDAO {
                 appointment.setCid(rs.getInt("CID"));
                 appointment.setDate(rs.getDate("DATE").toLocalDate());
                 appointment.setTime(rs.getTime("TIME").toLocalTime());
-                appointment.setStatus(rs.getString("STATUS"));
-            
+                appointment.setStatus(rs.getString("STATUS"));	
+                	
                 appointment.setMedicine(rs.getString("MEDICINE")); 
+                appointment.setMeetingCode(rs.getString("MEETING_CODE"));
                 
                 appointments.add(appointment);
             }
