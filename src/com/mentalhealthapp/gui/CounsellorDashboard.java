@@ -55,7 +55,7 @@ public class CounsellorDashboard extends JFrame {
         JLabel welcomeLabel = new JLabel("Welcome, Dr. " + counsellor.getName(), JLabel.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         
-        String[] columns = {"ID", "Date", "Time", "Help Seeker", "Status", "Medicine"};
+        String[] columns = {"ID", "Date", "Time", "Help Seeker", "Status", "Medicine", "Meeting Code"};
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -98,7 +98,8 @@ public class CounsellorDashboard extends JFrame {
             	    apt.getTime().format(DateTimeFormatter.ofPattern("HH:mm")),
             	    seekerName,
             	    apt.getStatus(),
-            	    apt.getMedicine() 
+            	    apt.getMedicine(),
+            	    apt.getMeetingCode()
             	});
         }
     }
@@ -112,7 +113,7 @@ public class CounsellorDashboard extends JFrame {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 20));
+        JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 20));
         
         formPanel.add(new JLabel("Appointment ID:"));
         JTextField aidField = new JTextField();
@@ -128,6 +129,10 @@ public class CounsellorDashboard extends JFrame {
         JTextField medicineField = new JTextField();
         formPanel.add(medicineField);
         
+        formPanel.add(new JLabel("Meeting Code/Link:"));
+        JTextField meetingCodeField = new JTextField();
+        formPanel.add(meetingCodeField);
+        
         JButton updateBtn = new JButton("Update Status");
         updateBtn.setFont(new Font("Arial", Font.BOLD, 14));
 
@@ -135,12 +140,14 @@ public class CounsellorDashboard extends JFrame {
             try {
                 int aid = Integer.parseInt(aidField.getText());
                 String newStatus = (String) statusCombo.getSelectedItem();
-                String medicine = medicineField.getText(); // ✅ correct place
+                String medicine = medicineField.getText(); // 
+                String meetingCode= meetingCodeField.getText();
 
-                if (appointmentDAO.updateAppointmentStatus(aid, newStatus, medicine)) {
+                if (appointmentDAO.updateAppointmentStatus(aid, newStatus, medicine,meetingCode)) {
                     JOptionPane.showMessageDialog(this, "Status updated.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     aidField.setText("");
                     medicineField.setText("");
+                    meetingCodeField.setText("");
                 } else {
                     JOptionPane.showMessageDialog(this, "Failed to update!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
