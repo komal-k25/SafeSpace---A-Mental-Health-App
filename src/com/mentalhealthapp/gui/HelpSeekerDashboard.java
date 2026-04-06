@@ -412,11 +412,13 @@ public class HelpSeekerDashboard extends JFrame {
     private void loadAlerts(DefaultTableModel model) {
         model.setRowCount(0);
         List<Alert> alerts = alertDAO.getAlertsBySeekerId(helpSeeker.getSeid());
-        
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
         for (Alert alert : alerts) {
             model.addRow(new Object[]{
                 alert.getAlid(),
-                alert.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                alert.getCreatedAt().format(formatter),
                 alert.getStatus()
             });
         }
