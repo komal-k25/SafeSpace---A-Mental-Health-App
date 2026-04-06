@@ -12,7 +12,7 @@ public class Appointment {
     private LocalTime time;
     private String status;
     private String medicine;
-
+    private String meetingCode;
     
     public Appointment() {}
     
@@ -88,6 +88,15 @@ public class Appointment {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getMeetingCode() { 
+    	return meetingCode; 
+    }
+    
+    public void setMeetingCode(String meetingCode) { 
+    	this.meetingCode = meetingCode; 
+    }
+    
     
     @Override
     public String toString() {
