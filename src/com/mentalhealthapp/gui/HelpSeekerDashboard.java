@@ -123,7 +123,7 @@ public class HelpSeekerDashboard extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        String[] columns = {"Date", "Time", "Score", "Status"};
+        String[] columns = {"Date", "Time", "Score"};
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -235,7 +235,7 @@ public class HelpSeekerDashboard extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        String[] columns = {"ID", "Date", "Time", "Counsellor", "Status", "Medicine"};
+        String[] columns = {"ID", "Date", "Time", "Counsellor", "Status", "Medicine", "Meeting Code"};
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -283,6 +283,8 @@ public class HelpSeekerDashboard extends JFrame {
             
             String medicine = (apt.getMedicine() == null || apt.getMedicine().isEmpty()) 
                               ? "-" : apt.getMedicine();
+            String meetingCode = (apt.getMeetingCode() == null || apt.getMeetingCode().isEmpty())
+                    ? "-" : apt.getMeetingCode();
             
             model.addRow(new Object[]{
                 apt.getAid(),
@@ -290,7 +292,8 @@ public class HelpSeekerDashboard extends JFrame {
                 apt.getTime().format(DateTimeFormatter.ofPattern("HH:mm")),
                 counsellorName,
                 apt.getStatus(),
-                medicine  // New column data
+                medicine,
+                meetingCode
             });
         }
     }
