@@ -120,6 +120,12 @@ public class CounsellorRegistrationDialog extends JDialog {
             JOptionPane.showMessageDialog(this, "Please fill in all fields!");
             return;
         }
+
+        String emailPattern = "^[A-Za-z0-9+_.-]+@(.+)$";
+        if (!email.matches(emailPattern)) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid email address!", "Invalid Email", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         
         if (!password.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(this, "Passwords do not match!");
